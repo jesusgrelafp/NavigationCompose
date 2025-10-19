@@ -20,21 +20,5 @@ import com.example.navigationcompose.viewmodel.ProductViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun  DetailScreen(
-    id : Int,
-    navController: NavController,
-    viewModel: ProductViewModel
-) {
-    val product = viewModel.getProductById(id)
-    Scaffold (
-        topBar = { TopAppBar(title = {Text("Detalle del producto")}) }
-    ) { contentPadding ->
-        Column (
-            modifier = Modifier.padding(contentPadding).fillMaxSize(),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-
-        }
-    }
+fun  DetailScreen(id : Int) {
 }
