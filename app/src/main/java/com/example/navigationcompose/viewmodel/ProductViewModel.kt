@@ -16,7 +16,8 @@ class ProductViewModel : ViewModel() {
         _uiState.value = ProductsUiState(products = DataSource.products)
     }
 
-    fun getProductById(id: Int): Product? {
+    fun getProductById(id: Int): Product {
         return _uiState.value.products.firstOrNull { it.id == id }
+            ?: Product(id = id, title = "Producto no encontrado")
     }
 }

@@ -5,5 +5,5 @@ import androidx.compose.runtime.Composable
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun  DetailScreen(id : Int) {
+fun  DetailScreen() {
 }

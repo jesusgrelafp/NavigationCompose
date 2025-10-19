@@ -8,12 +8,3 @@ import com.example.navigationcompose.data.Product
 fun ProductListComponent(product: Product,
                          onClick: (Int) ->Unit) {
 }
-
-@Preview(showBackground = true)
-@Composable
-fun PreviewProductListComponent() {
-    ProductListComponent(
-        Product(id=1, title="Café"),
-        onClick = {}
-    )
-}
