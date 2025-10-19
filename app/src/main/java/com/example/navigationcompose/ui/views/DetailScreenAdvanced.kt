@@ -30,20 +30,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
-import com.example.navigationcompose.viewmodel.ProductViewModel
 import com.example.navigationcompose.data.Product
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun  DetailScreenAdvanced(
-    id : Int,
-    navController: NavController,
-    viewModel: ProductViewModel
+fun  DetailScreenAdvanced(product: Product,
+                          onBack: () -> Unit
 ) {
     val scrollState = rememberScrollState()
-
-    val product = viewModel.getProductById(id) ?: Product(id = id, title = "Desconocido")
 
     Scaffold(
         topBar = {
@@ -54,7 +48,7 @@ fun  DetailScreenAdvanced(
                 }
             },
             navigationIcon = {
-                IconButton(onClick = {navController.popBackStack()}) {
+                IconButton(onClick = {onBack()}) {
                     Icon(Icons.Default.ArrowBack, contentDescription = "Volver")
                 }
             })
@@ -139,7 +133,7 @@ fun  DetailScreenAdvanced(
 
             Spacer(modifier = Modifier.height(10.dp))
 
-            Button(onClick = { navController.popBackStack() }) {
+            Button(onClick = { onBack() }) {
                 Text("Volver")
             }
         }

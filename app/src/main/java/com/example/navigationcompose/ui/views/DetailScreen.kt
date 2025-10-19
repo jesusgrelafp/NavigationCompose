@@ -15,17 +15,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
-import com.example.navigationcompose.viewmodel.ProductViewModel
+import com.example.navigationcompose.data.Product
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun  DetailScreen(
-    id : Int,
-    navController: NavController,
-    viewModel: ProductViewModel
+fun  DetailScreen(product: Product,
+                  onBack: () -> Unit
 ) {
-    val product = viewModel.getProductById(id)
     Scaffold (
         topBar = { TopAppBar(title = {Text("Detalle del producto")}) }
     ) { contentPadding ->
@@ -35,10 +31,10 @@ fun  DetailScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
-            Text("Has seleccionado el producto: $id")
-            Text("Que es: ${product?.title ?: ""}")
+            Text("Has seleccionado el producto: $product.id")
+            Text("Que es: $product.title }")
             Spacer(modifier = Modifier.height(28.dp))
-            Button(onClick = {navController.popBackStack()} ){
+            Button(onClick = {onBack()} ){
                 Text("Volver")
             }
         }
