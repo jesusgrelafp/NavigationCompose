@@ -40,7 +40,7 @@ fun ProductListComponent(product: Product,
                 Image( painter = painterResource(product.image),
                        contentDescription = product.description,
                     modifier = Modifier.padding(end = 20.dp))
-                Text(text = "${product.title}",
+                Text(text = product.title,
                     fontSize = 16.sp
                 )
         }
