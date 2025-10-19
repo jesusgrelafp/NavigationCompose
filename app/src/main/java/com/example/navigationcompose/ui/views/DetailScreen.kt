@@ -35,12 +35,6 @@ fun  DetailScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
-            Text("Has seleccionado el producto: $id")
-            Text("Que es: ${product?.title ?: ""}")
-            Spacer(modifier = Modifier.height(28.dp))
-            Button(onClick = {navController.popBackStack()} ){
-                Text("Volver")
-            }
         }
     }
 }
