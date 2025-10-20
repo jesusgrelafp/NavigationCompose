@@ -99,7 +99,7 @@ fun  DetailScreenAdvanced(product: Product,
                 modifier = Modifier.padding(start = 4.dp, end = 4.dp)
             )
 
-            Spacer(modifier = Modifier.height(10.dp))
+            Divider(modifier = Modifier.padding(16.dp))
 
             // Precio + Estado + Stock
             Row(
