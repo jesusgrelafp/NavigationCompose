@@ -1,5 +1,8 @@
 package com.example.navigationcompose.ui.views
 
+import android.content.Context
+import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -9,36 +12,46 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Button
-import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.navigationcompose.data.Product
+import com.example.navigationcompose.ui.components.AddToCartDialog
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun  DetailScreenAdvanced(product: Product,
-                          onBack: () -> Unit
+                          onBack: () -> Unit,
+                          onAddToCart: (Product, Int) -> Unit
 ) {
+    val mContext = LocalContext.current
     val scrollState = rememberScrollState()
-
+    var showDialog by remember { mutableStateOf(false) }
     Scaffold(
         topBar = {
             TopAppBar(title = {
@@ -49,7 +62,7 @@ fun  DetailScreenAdvanced(product: Product,
             },
             navigationIcon = {
                 IconButton(onClick = {onBack()}) {
-                    Icon(Icons.Default.ArrowBack, contentDescription = "Volver")
+                    Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Volver")
                 }
             })
         }
@@ -64,12 +77,11 @@ fun  DetailScreenAdvanced(product: Product,
         ) {
 
             // Imagen principal
-            Row() {
-                Image(
-                    painter = painterResource(product.image),
-                    contentDescription = product.description
-                )
-            }
+            Image(
+                painter = painterResource(product.image),
+                contentDescription = product.description
+            )
+
             Spacer(modifier = Modifier.height(4.dp))
 
             // Título
@@ -89,7 +101,7 @@ fun  DetailScreenAdvanced(product: Product,
                 modifier = Modifier.padding(top = 4.dp)
             )
 
-            Divider(modifier = Modifier.padding(16.dp))
+            HorizontalDivider(modifier = Modifier.padding(16.dp))
 
             // Descripción
             Text(
@@ -99,15 +111,18 @@ fun  DetailScreenAdvanced(product: Product,
                 modifier = Modifier.padding(start = 4.dp, end = 4.dp)
             )
 
-            Divider(modifier = Modifier.padding(16.dp))
+            HorizontalDivider(modifier = Modifier.padding(16.dp))
 
             // Precio + Estado + Stock
             Row(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.fillMaxWidth().padding(10.dp)
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(10.dp)
             ) {
-                val disponible = if (product.availabilityStatus.equals("En stock")) true else false
+                val stockDisponible = if (product.stock != 0) true else false
+                val availabilityStatus = if (stockDisponible) "En Stock" else "Agotado"
 
                 Text(
                     text = "${product.price} €",
@@ -116,14 +131,14 @@ fun  DetailScreenAdvanced(product: Product,
                     color = Color.Blue
                 )
 
-                val color = if (disponible) Color(0xFF4CAF50) else Color.Red
+                val color = if (stockDisponible) Color(0xFF4CAF50) else Color.Red
                 Text(
-                    text = " ${product.availabilityStatus}",
+                    text = " ${availabilityStatus}",
                     fontSize = 20.sp,
                     color = color
                 )
 
-                if (disponible) {
+                if (stockDisponible) {
                     Text(
                         "${product.stock} uds.",
                         fontSize = 20.sp
@@ -133,10 +148,44 @@ fun  DetailScreenAdvanced(product: Product,
 
             Spacer(modifier = Modifier.height(10.dp))
 
-            Button(onClick = { onBack() }) {
-                Text("Volver")
+            Row (
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(20.dp)
+            ) {
+
+                Button(
+                    onClick = { showDialog = true},
+                    modifier = Modifier.size(width = 150.dp, height = 40.dp)
+                ) {
+                    Text("Añadir al carrito")
+                }
+
+                if (showDialog) {
+                    if ( product.stock == 0) {
+                        mensajeToast(mContext,"No hay stock disponible")
+                        showDialog = false
+                    } else {
+                        AddToCartDialog(
+                            onDismiss = { showDialog = false },
+                            onConfirm = { quantity ->
+                                showDialog = false
+                                Log.v("QUANTITY", "La cantidad es $quantity")
+                                onAddToCart(product, quantity)
+                                println("Añadido al carrito: $quantity")
+                            }
+                        )
+                    }
+                }
             }
         }
-
     }
 }
+
+fun mensajeToast(context: Context, text: String) {
+    Toast.makeText(context, text, Toast.LENGTH_SHORT).show()
+}
+
+

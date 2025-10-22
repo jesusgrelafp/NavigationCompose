@@ -18,17 +18,33 @@ fun AppNavigation(viewModel: ProductViewModel = viewModel()) {
     val uiState by viewModel.uiState.collectAsState()
     val navController: NavHostController = rememberNavController()
     NavHost(navController, startDestination = "home") {
-        composable("home") {
-            HomeScreen(products = uiState.products,
-                       onNavigateToDetail = {id -> navController.navigate("detalle/$id")} )
+        composable(route = "home") {
+            HomeScreen(
+                products = uiState.products,
+                total = uiState.cartItems.sumOf { it.price * it.quantity },
+                onNavigateToDetail = {id -> navController.navigate("detalle/$id")},
+                onNavigateToCart = {navController.navigate("cart")}
+            )
         }
-        composable("detalle/{id}",
+        composable(route = "detalle/{id}",
                     arguments = listOf(navArgument("id") {type = NavType.IntType})
         ) { backStackEntry ->
                val id = backStackEntry.arguments?.getInt("id") ?: 0
                val product = viewModel.getProductById(id)
-               DetailScreenAdvanced(onBack = {navController.popBackStack()},
-                                    product = product)
+               DetailScreenAdvanced(
+                   product = product,
+                   onBack = {navController.popBackStack()},
+                   onAddToCart = { product, quantity -> viewModel.addToCart(product,quantity)
+                                   navController.popBackStack()
+                                 }
+               )
+        }
+        composable(route = "cart") {
+            CartScreen(
+                cartItems = uiState.cartItems,
+                onBack = {navController.popBackStack()},
+                onRemoveFromCart = {id -> viewModel.removeFromCart(id)}
+            )
         }
     }
 }

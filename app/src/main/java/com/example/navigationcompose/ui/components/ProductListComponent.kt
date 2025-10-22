@@ -39,19 +39,10 @@ fun ProductListComponent(product: Product,
         ) {
                 Image( painter = painterResource(product.image),
                        contentDescription = product.description,
-                    modifier = Modifier.padding(end = 20.dp))
+                       modifier = Modifier.padding(end = 20.dp))
                 Text(text = product.title,
                     fontSize = 16.sp
                 )
         }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun PreviewProductListComponent() {
-    ProductListComponent(
-        Product(id=1, title="Café"),
-        onClick = {}
-    )
 }
