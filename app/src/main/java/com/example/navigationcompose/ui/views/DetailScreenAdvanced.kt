@@ -157,8 +157,7 @@ fun  DetailScreenAdvanced(product: Product,
             ) {
 
                 Button(
-                    onClick = { showDialog = true},
-                    modifier = Modifier.size(width = 150.dp, height = 40.dp)
+                    onClick = { showDialog = true}
                 ) {
                     Text("Añadir al carrito")
                 }
@@ -172,9 +171,7 @@ fun  DetailScreenAdvanced(product: Product,
                             onDismiss = { showDialog = false },
                             onConfirm = { quantity ->
                                 showDialog = false
-                                Log.v("QUANTITY", "La cantidad es $quantity")
                                 onAddToCart(product, quantity)
-                                println("Añadido al carrito: $quantity")
                             }
                         )
                     }
