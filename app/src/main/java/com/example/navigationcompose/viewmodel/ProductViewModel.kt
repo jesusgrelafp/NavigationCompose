@@ -49,7 +49,7 @@ class ProductViewModel : ViewModel() {
         }
 
         // Actualizamos el estado
-        _uiState.value = _uiState.value.copy(cartItems = currentCart)
+        _uiState.value = _uiState.value.copy(cartItems = currentCart.toList())
     }
 
     fun removeFromCart(id: Int) {
