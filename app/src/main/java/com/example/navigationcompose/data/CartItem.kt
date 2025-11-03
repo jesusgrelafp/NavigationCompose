@@ -7,5 +7,5 @@ data class CartItem(
     val title: String,
     @DrawableRes val image: Int = 0,
     val price: Double,
-    var quantity: Int = 1
+    val quantity: Int = 1
 )

@@ -1,11 +1,12 @@
 package com.example.navigationcompose.ui.views
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
@@ -36,24 +37,26 @@ fun HomeScreen(products: List<Product>,
     Scaffold (
         topBar = {
             TopAppBar(
+                modifier =  Modifier.height(130.dp),
                 title = {
-                    Row(modifier =  Modifier.fillMaxWidth().padding(20.dp),
+                    Row(modifier =  Modifier.fillMaxWidth().padding(start =  20.dp),
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text("Lista de productos", Modifier.weight(2f))
-                        Row (modifier =  Modifier.fillMaxWidth().weight(1f),
-                            horizontalArrangement = Arrangement.SpaceBetween,
-                            verticalAlignment = Alignment.CenterVertically
+                        Column (modifier =  Modifier.fillMaxHeight().weight(1f),
+                            verticalArrangement = Arrangement.Center,
+                            horizontalAlignment = Alignment.CenterHorizontally
                         ) {
-                            Text("$totalText €", fontSize = 16.sp)
-                            Spacer(Modifier.width(20.dp))
+
                             IconButton(onClick = { onNavigateToCart() }) {
                                 Icon(
                                     imageVector = Icons.Filled.ShoppingCart,
                                     contentDescription = "Carrito"
                                 )
                             }
+
+                            Text("$totalText €", fontSize = 12.sp)
                         }
                     }
                 }
@@ -64,9 +67,8 @@ fun HomeScreen(products: List<Product>,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             items(products) {
-                product ->  ProductListComponent(product = product,
-                                        onClick = { id -> onNavigateToDetail(id)}
-                )
+                product -> ProductListComponent(product = product,
+                                                onClick = { id -> onNavigateToDetail(id)})
             }
         }
     }

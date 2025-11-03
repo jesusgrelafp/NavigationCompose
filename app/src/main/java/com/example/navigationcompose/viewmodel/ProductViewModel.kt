@@ -23,6 +23,27 @@ class ProductViewModel : ViewModel() {
     }
 
     fun addToCart(product: Product, quantity: Int) {
+        val nuevaListaCartItems =
+            if ( _uiState.value.cartItems.any { it.id == product.id} ) {
+                _uiState.value.cartItems.map{
+                        if ( it.id == product.id) {
+                            it.copy(quantity = it.quantity + quantity)
+                        } else {
+                            it
+                        }
+                }
+            } else {
+                val nuevoCartItem = CartItem(id = product.id,
+                                        title =  product.title,
+                                        image = product.image,
+                                        price = product.price,
+                                        quantity = quantity)
+                _uiState.value.cartItems + nuevoCartItem
+            }
+        _uiState.value = _uiState.value.copy(cartItems =  nuevaListaCartItems)
+    }
+
+    fun addToCartWithMutables(product: Product, quantity: Int) {
         // Copiamos la lista actual a una mutable
         val currentCart = _uiState.value.cartItems.toMutableList()
 

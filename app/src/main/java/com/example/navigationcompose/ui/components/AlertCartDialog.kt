@@ -27,14 +27,14 @@ fun AddToCartDialog(
     var quantity by remember { mutableStateOf(1) }
 
     AlertDialog(
-        onDismissRequest = onDismiss,
+        onDismissRequest = { onDismiss() },
         confirmButton = {
             TextButton(onClick = { onConfirm(quantity) }) {
                 Text("Añadir")
             }
         },
         dismissButton = {
-            TextButton(onClick = onDismiss) {
+            TextButton(onClick = { onDismiss() } ) {
                 Text("Cancelar")
             }
         },
