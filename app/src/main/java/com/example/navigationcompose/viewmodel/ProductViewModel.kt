@@ -43,36 +43,6 @@ class ProductViewModel : ViewModel() {
         _uiState.value = _uiState.value.copy(cartItems =  nuevaListaCartItems)
     }
 
-    fun addToCartWithMutables(product: Product, quantity: Int) {
-        // Copiamos la lista actual a una mutable
-        val currentCart = _uiState.value.cartItems.toMutableList()
-
-        // Buscamos si ya hay un item con el mismo producto
-        val existingItemIndex = currentCart.indexOfFirst { it.id == product.id }
-
-        if (existingItemIndex != -1) {
-            // Si existe, creamos un nuevo CartItem con la cantidad actualizada
-            val updatedItem = currentCart[existingItemIndex].copy(
-                quantity = currentCart[existingItemIndex].quantity + quantity
-            )
-            currentCart[existingItemIndex] = updatedItem
-        } else {
-            // Si no existe, lo añadimos
-            currentCart.add(
-                CartItem(
-                    id =  product.id,
-                    title =  product.title,
-                    image =  product.image,
-                    price = product.price,
-                    quantity = quantity
-                )
-            )
-        }
-
-        // Actualizamos el estado
-        _uiState.value = _uiState.value.copy(cartItems = currentCart.toList())
-    }
-
     fun removeFromCart(id: Int) {
         val updatedCart = _uiState.value.cartItems.filter { it.id != id }
         _uiState.value = _uiState.value.copy(cartItems = updatedCart)
